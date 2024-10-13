@@ -13,13 +13,14 @@ class Meaning {
 
   factory Meaning.fromJson(Map<String, dynamic> json) {
     return Meaning(
-      id: json['id'] as String,
-      def: json['def'] as String,
-      example: json['example'] as String,
-      speechPart: json['speech_part'] as String,
+      id: json['id'] as String? ?? '', // Default to an empty string if null
+      def: json['def'] as String? ?? 'No definition available',
+      example: json['example'] as String? ?? 'No example available',
+      speechPart: json['speech_part'] as String? ?? 'Unknown',
     );
   }
 }
+
 
 class Word {
   final String word;
@@ -33,13 +34,13 @@ class Word {
   });
 
   factory Word.fromJson(Map<String, dynamic> json) {
-    var meaningsJson = json['meanings'] as List;
+    var meaningsJson = json['meanings'] as List? ?? [];
     List<Meaning> meaningsList =
         meaningsJson.map((i) => Meaning.fromJson(i)).toList();
 
     return Word(
-      word: json['word'] as String,
-      wordsetId: json['wordset_id'] as String,
+      word: json['word'] as String? ?? 'Unknown word',
+      wordsetId: json['wordset_id'] as String? ?? 'Unknown',
       meanings: meaningsList,
     );
   }

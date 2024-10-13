@@ -1,19 +1,45 @@
+import 'dart:convert'; // For jsonDecode
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // For rootBundle
 
 import '../settings/settings_view.dart';
 import 'word.dart';
 import 'word_details_view.dart';
 
-/// Displays a list of Words.
-class WordListView extends StatelessWidget {
-  const WordListView({
-    super.key,
-    this.items = const [Word(1), Word(2), Word(3)],
-  });
+class WordListView extends StatefulWidget {
+  const WordListView({super.key});
 
   static const routeName = '/';
 
-  final List<Word> items;
+  @override
+  _WordListViewState createState() => _WordListViewState();
+}
+
+class _WordListViewState extends State<WordListView> {
+  List<Word> items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadWords();
+  }
+
+  Future<void> loadWords() async {
+    // Load the JSON file from assets
+    final String response = await rootBundle.loadString('assets/words/a.json');
+    final data = jsonDecode(response) as Map<String, dynamic>;
+
+    // Convert the JSON into a list of Word objects
+    List<Word> loadedWords = [];
+    data.forEach((key, value) {
+      loadedWords.add(Word.fromJson(value));
+    });
+
+    // Set the state with the new list of words
+    setState(() {
+      items = loadedWords;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,47 +50,40 @@ class WordListView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              // Navigate to the settings page. If the user leaves and returns
-              // to the app after it has been killed while running in the
-              // background, the navigation stack is restored.
               Navigator.restorablePushNamed(context, SettingsView.routeName);
             },
           ),
         ],
       ),
+      body: items.isEmpty
+          ? const Center(
+              child:
+                  CircularProgressIndicator()) // Show loading indicator while loading
+          : ListView.builder(
+              restorationId: 'WordListView',
+              itemCount: items.length,
+              itemBuilder: (BuildContext context, int index) {
+                final item = items[index];
 
-      // To work with lists that may contain a large number of items, it’s best
-      // to use the ListView.builder constructor.
-      //
-      // In contrast to the default ListView constructor, which requires
-      // building all Widgets up front, the ListView.builder constructor lazily
-      // builds Widgets as they’re scrolled into view.
-      body: ListView.builder(
-        // Providing a restorationId allows the ListView to restore the
-        // scroll position when a user leaves and returns to the app after it
-        // has been killed while running in the background.
-        restorationId: 'WordListView',
-        itemCount: items.length,
-        itemBuilder: (BuildContext context, int index) {
-          final item = items[index];
-
-          return ListTile(
-              title: Text('Word ${item.id}'),
-              leading: const CircleAvatar(
-                // Display the Flutter Logo image asset.
-                foregroundImage: AssetImage('assets/images/flutter_logo.png'),
-              ),
-              onTap: () {
-                // Navigate to the details page. If the user leaves and returns to
-                // the app after it has been killed while running in the
-                // background, the navigation stack is restored.
-                Navigator.restorablePushNamed(
-                  context,
-                  WordDetailsView.routeName,
+                return ListTile(
+                  title: Text(item.word),
+                  leading: const CircleAvatar(
+                    foregroundImage:
+                        AssetImage('assets/images/flutter_logo.png'),
+                  ),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      WordDetailsView.routeName,
+                      arguments: item, // Passing the Word object
+                    );
+                  },
                 );
-              });
-        },
-      ),
+              },
+            ),
     );
   }
 }
+
+
+
