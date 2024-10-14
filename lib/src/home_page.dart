@@ -95,7 +95,12 @@ class _HomePageState extends State<HomePage> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/index');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => IndexPage(words: allWords),
+                          ),
+                        );
                       },
                       child: const Text('Browse Words'),
                     ),

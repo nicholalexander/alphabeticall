@@ -1,39 +1,27 @@
 import 'package:flutter/material.dart';
 import 'word.dart';
 
-/// Displays detailed information about a Word.
 class WordDetailsView extends StatelessWidget {
-  const WordDetailsView({super.key});
+  final Word word; // Word object passed from the list
 
-  static const routeName = '/words';
+  const WordDetailsView({super.key, required this.word});
+
+  static const routeName = '/words'; // Add routeName here
 
   @override
   Widget build(BuildContext context) {
-    // Retrieve the Word object directly from the arguments
-    final Word word = ModalRoute.of(context)!.settings.arguments as Word;
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(word.word),
-      ),
+      appBar: AppBar(title: Text(word.word)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Word section at the top
             Text(
               word.word,
-              style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
-
-            const SizedBox(height: 16),
-
-            // Meanings and examples
             Expanded(
               child: ListView.builder(
                 itemCount: word.meanings.length,
@@ -44,7 +32,6 @@ class WordDetailsView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Definition
                         Text(
                           '${index + 1}. ${meaning.def}',
                           style: const TextStyle(
@@ -53,8 +40,6 @@ class WordDetailsView extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-
-                        // Part of speech as plain text
                         Text(
                           'Part of Speech: ${meaning.speechPart}',
                           style: const TextStyle(
@@ -64,8 +49,6 @@ class WordDetailsView extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-
-                        // Example sentence, if available
                         if (meaning.example.isNotEmpty)
                           Text(
                             'Example: "${meaning.example}"',
@@ -81,26 +64,11 @@ class WordDetailsView extends StatelessWidget {
                 },
               ),
             ),
-
-            // Meta section at the bottom
             const Divider(thickness: 1),
             const SizedBox(height: 8),
             Text(
-              'Metadata',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            Text(
               'Wordset ID: ${word.wordsetId}',
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),

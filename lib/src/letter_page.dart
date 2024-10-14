@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'word/word.dart';
+import 'word/word_details_view.dart'; // Import WordDetailsView
 
 class LetterPage extends StatelessWidget {
   final String letter;
@@ -10,7 +11,7 @@ class LetterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Words Starting with $letter')),
+      appBar: AppBar(title: Text('$letter words')),
       body: ListView.builder(
         itemCount: words.length,
         itemBuilder: (context, index) {
@@ -18,6 +19,15 @@ class LetterPage extends StatelessWidget {
           return ListTile(
             title: Text(word.word),
             subtitle: Text(word.meanings.first.def),
+            onTap: () {
+              // Navigate to WordDetailsView and pass the selected word
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WordDetailsView(word: word),
+                ),
+              );
+            },
           );
         },
       ),

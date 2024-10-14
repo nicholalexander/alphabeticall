@@ -51,11 +51,14 @@ class _MyAppState extends State<MyApp> {
                       SettingsView(controller: widget.settingsController),
                 );
               case WordDetailsView.routeName:
+                // Ensure that Word object is passed correctly
+                final Word word = routeSettings.arguments as Word;
                 return MaterialPageRoute<void>(
-                  builder: (BuildContext context) => const WordDetailsView(),
+                  builder: (BuildContext context) =>
+                      WordDetailsView(word: word), // Pass the Word object
                 );
               case '/letter':
-                // Extract the letter from route arguments and pass words for the letter
+                // Extract the letter from route arguments and filter words accordingly
                 final String letter = routeSettings.arguments as String;
                 final List<Word> filteredWords = allWords
                     .where((word) => word.word.startsWith(letter.toLowerCase()))
@@ -65,12 +68,13 @@ class _MyAppState extends State<MyApp> {
                       LetterPage(letter: letter, words: filteredWords),
                 );
               case '/index':
-                // Pass the full word list to the index page
+                // Pass the full word list to the IndexPage
                 return MaterialPageRoute<void>(
                   builder: (BuildContext context) => IndexPage(words: allWords),
                 );
               case '/':
               default:
+                // Load the home page and trigger loading of words
                 return MaterialPageRoute<void>(
                   builder: (BuildContext context) => HomePage(
                     onWordsLoaded: (List<Word> words) {

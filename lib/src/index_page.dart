@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'letter_page.dart';
 import 'word/word.dart';
+import 'letter_page.dart';
 
 class IndexPage extends StatelessWidget {
-  final List<Word> words; // Receive the list of words from the HomePage
+  final List<Word> words;
 
   const IndexPage({super.key, required this.words});
 
@@ -22,7 +22,7 @@ class IndexPage extends StatelessWidget {
           return ListTile(
             title: Text(letter, style: const TextStyle(fontSize: 24)),
             onTap: () {
-              // Pass the filtered words for the selected letter
+              // Pass the filtered words to the LetterPage
               Navigator.push(
                 context,
                 MaterialPageRoute(
