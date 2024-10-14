@@ -1,13 +1,13 @@
-import 'dart:convert'; // For jsonDecode
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // For rootBundle
-
-import '../settings/settings_view.dart';
 import 'word.dart';
 import 'word_details_view.dart';
+import 'dart:convert'; // For jsonDecode
+import 'package:flutter/services.dart'; // For rootBundle
 
 class WordListView extends StatefulWidget {
-  const WordListView({super.key});
+  final String? letter; // New parameter to filter by letter
+
+  const WordListView({super.key, this.letter});
 
   static const routeName = '/';
 
@@ -17,28 +17,56 @@ class WordListView extends StatefulWidget {
 
 class _WordListViewState extends State<WordListView> {
   List<Word> items = [];
+  bool isLoading = true; // To track loading state
 
   @override
   void initState() {
     super.initState();
-    loadWords();
+    loadWords(); // Call the JSON load function in initState
   }
 
   Future<void> loadWords() async {
-    // Load the JSON file from assets
-    final String response = await rootBundle.loadString('assets/words/a.json');
-    final data = jsonDecode(response) as Map<String, dynamic>;
+    // Load all words or filter by the selected letter
+    List<Word> loadedWords = await loadAllWords();
 
-    // Convert the JSON into a list of Word objects
-    List<Word> loadedWords = [];
-    data.forEach((key, value) {
-      loadedWords.add(Word.fromJson(value));
-    });
+    if (widget.letter != null) {
+      loadedWords = loadedWords
+          .where((word) => word.word.startsWith(widget.letter!))
+          .toList();
+    }
 
-    // Set the state with the new list of words
+    // Update the state after loading words
     setState(() {
       items = loadedWords;
+      isLoading = false; // Set loading to false once data is loaded
     });
+  }
+
+  Future<List<Word>> loadAllWords() async {
+    List<Word> allWords = [];
+
+    // List of all the letters for which we have JSON files
+    const letters = 'abcdefghijklmnopqrstuvwxyz';
+
+    try {
+      // Loop through each letter and load its corresponding JSON file
+      for (var letter in letters.split('')) {
+        final String filePath = 'assets/words/$letter.json';
+        final String response = await rootBundle.loadString(filePath);
+        final data = jsonDecode(response) as Map<String, dynamic>;
+
+        // Convert each word in the JSON file to a Word object and add it to the list
+        data.forEach((key, value) {
+          allWords.add(Word.fromJson(value));
+        });
+      }
+
+      return allWords;
+    } catch (e) {
+      // Handle error (e.g., file not found or failed to load)
+      print('Error loading words: $e');
+      return [];
+    }
   }
 
   @override
@@ -46,36 +74,22 @@ class _WordListViewState extends State<WordListView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Word List'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.restorablePushNamed(context, SettingsView.routeName);
-            },
-          ),
-        ],
       ),
-      body: items.isEmpty
+      body: isLoading
           ? const Center(
-              child:
-                  CircularProgressIndicator()) // Show loading indicator while loading
+              child: CircularProgressIndicator()) // Show loading indicator
           : ListView.builder(
-              restorationId: 'WordListView',
               itemCount: items.length,
               itemBuilder: (BuildContext context, int index) {
                 final item = items[index];
 
                 return ListTile(
                   title: Text(item.word),
-                  leading: const CircleAvatar(
-                    foregroundImage:
-                        AssetImage('assets/images/flutter_logo.png'),
-                  ),
                   onTap: () {
                     Navigator.pushNamed(
                       context,
                       WordDetailsView.routeName,
-                      arguments: item, // Passing the Word object
+                      arguments: item, // Pass the Word object
                     );
                   },
                 );
@@ -84,5 +98,3 @@ class _WordListViewState extends State<WordListView> {
     );
   }
 }
-
-
