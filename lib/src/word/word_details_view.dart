@@ -18,97 +18,91 @@ class WordDetailsView extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Word title
-                Text(
-                  word.word,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-
-                // Wordset ID
-                Text(
-                  'Wordset ID: ${word.wordsetId}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Meanings with dividers
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: word.meanings.length,
-                    separatorBuilder: (context, index) => const Divider(
-                      thickness: 1,
-                      color: Colors.grey,
-                    ),
-                    itemBuilder: (context, index) {
-                      final meaning = word.meanings[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Part of speech as a Chip
-                            Row(
-                              children: [
-                                const Text(
-                                  'Part of Speech: ',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                Chip(
-                                  label: Text(
-                                    meaning.speechPart,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  backgroundColor: Colors.blueAccent,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-
-                            // Definition
-                            Text(
-                              meaning.def,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-
-                            // Example sentence
-                            Text(
-                              'Example: "${meaning.example}"',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontStyle: FontStyle.italic,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Word section at the top
+            Text(
+              word.word,
+              style: const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
+            const SizedBox(height: 24),
+
+            const SizedBox(height: 16),
+
+            // Meanings and examples
+            Expanded(
+              child: ListView.builder(
+                itemCount: word.meanings.length,
+                itemBuilder: (context, index) {
+                  final meaning = word.meanings[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Definition
+                        Text(
+                          '${index + 1}. ${meaning.def}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Part of speech as plain text
+                        Text(
+                          'Part of Speech: ${meaning.speechPart}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Example sentence, if available
+                        if (meaning.example.isNotEmpty)
+                          Text(
+                            'Example: "${meaning.example}"',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.black87,
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            // Meta section at the bottom
+            const Divider(thickness: 1),
+            const SizedBox(height: 8),
+            Text(
+              'Metadata',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            Text(
+              'Wordset ID: ${word.wordsetId}',
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+          ],
         ),
       ),
     );
