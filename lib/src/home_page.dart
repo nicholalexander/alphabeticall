@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'word/word.dart';
 import 'index_page.dart';
+import 'search_page.dart';
+import 'word/word_details_view.dart';
 
 class HomePage extends StatefulWidget {
   final void Function(List<Word> words) onWordsLoaded;
@@ -16,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Word> allWords = [];
-  Word? wordOfTheDay;
+  Word? randomWord;
   bool isLoading = true;
 
   @override
@@ -30,11 +32,10 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       allWords = loadedWords;
-      wordOfTheDay = getRandomWordOfTheDay(loadedWords);
+      randomWord = getRandomWord(loadedWords);
       isLoading = false;
     });
 
-    // Pass the loaded words back to MyApp via the callback
     widget.onWordsLoaded(loadedWords);
   }
 
@@ -60,9 +61,15 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Word getRandomWordOfTheDay(List<Word> words) {
+  Word getRandomWord(List<Word> words) {
     final random = Random();
     return words[random.nextInt(words.length)];
+  }
+
+  void refreshRandomWord() {
+    setState(() {
+      randomWord = getRandomWord(allWords);
+    });
   }
 
   @override
@@ -71,30 +78,15 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(title: const Text('Alphabeticall')),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Welcome to Alphabeticall!',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Random Word',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  if (wordOfTheDay != null)
-                    Text(
-                      '${wordOfTheDay!.word} (${wordOfTheDay!.meanings.first.speechPart})\n${wordOfTheDay!.meanings.first.def}',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  const Spacer(),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
+          : SingleChildScrollView(
+              // Wrap the Column in SingleChildScrollView
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    // Browse Words Card
+                    GestureDetector(
+                      onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -102,10 +94,108 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      child: const Text('Browse Words'),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'Browse Words',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Text('Tap to browse the words'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+
+                    const SizedBox(height: 20),
+
+                    // Search Words Card
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SearchPage(words: allWords),
+                          ),
+                        );
+                      },
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'Search Words',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Text('Tap to search for a word'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Random Word Card
+                    GestureDetector(
+                      onTap: refreshRandomWord,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Random Word',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                if (randomWord != null)
+                                  Text(
+                                    '${randomWord!.word} (${randomWord!.meanings.first.speechPart})\n${randomWord!.meanings.first.def}',
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
+                                const SizedBox(height: 10),
+                                const Text(
+                                  'Tap to get a new word',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
     );
