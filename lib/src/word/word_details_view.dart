@@ -58,23 +58,28 @@ class WordDetailsView extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          if (meaning.example.isNotEmpty)
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(Icons.book,
-                                    size: 16, color: theme.colorScheme.primary),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    'Example: "${meaning.example}"',
-                                    style: theme.textTheme.bodyLarge?.copyWith(
-                                      fontStyle: FontStyle.italic,
-                                      color: theme.hintColor,
+                          if (meaning.hasMeaning())
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.book,
+                                      size: 16,
+                                      color: theme.colorScheme.primary),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      'Example: "${meaning.example}"',
+                                      style:
+                                          theme.textTheme.bodyLarge?.copyWith(
+                                        fontStyle: FontStyle.italic,
+                                        color: theme.hintColor,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                         ],
                       ),
