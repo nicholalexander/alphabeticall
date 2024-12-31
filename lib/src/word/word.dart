@@ -19,6 +19,10 @@ class Meaning {
       speechPart: json['speech_part'] as String? ?? 'Unknown',
     );
   }
+
+  bool hasMeaning() {
+    return example.isNotEmpty && example != 'No example available';
+  }
 }
 
 

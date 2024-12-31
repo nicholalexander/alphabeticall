@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'word.dart';
 
 class WordDetailsView extends StatelessWidget {
-  final Word word; // Word object passed from the list
+  final Word word;
 
   const WordDetailsView({super.key, required this.word});
 
-  static const routeName = '/words'; // Add routeName here
+  static const routeName = '/words';
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(title: Text(word.word)),
       body: Padding(
@@ -19,7 +21,10 @@ class WordDetailsView extends StatelessWidget {
           children: [
             Text(
               word.word,
-              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.primary,
+              ),
             ),
             const SizedBox(height: 24),
             Expanded(
@@ -27,38 +32,57 @@ class WordDetailsView extends StatelessWidget {
                 itemCount: word.meanings.length,
                 itemBuilder: (context, index) {
                   final meaning = word.meanings[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${index + 1}. ${meaning.def}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Part of Speech: ${meaning.speechPart}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        if (meaning.example.isNotEmpty)
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            'Example: "${meaning.example}"',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontStyle: FontStyle.italic,
-                              color: Colors.black87,
+                            '${index + 1}. ${meaning.def}',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                      ],
+                          const SizedBox(height: 8),
+                          Text(
+                            '${meaning.speechPart}',
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              fontStyle: FontStyle.italic,
+                              color: theme.colorScheme.secondary,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          if (meaning.hasMeaning())
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.book,
+                                      size: 16,
+                                      color: theme.colorScheme.primary),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      'Example: "${meaning.example}"',
+                                      style:
+                                          theme.textTheme.bodyLarge?.copyWith(
+                                        fontStyle: FontStyle.italic,
+                                        color: theme.hintColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -68,7 +92,7 @@ class WordDetailsView extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Wordset ID: ${word.wordsetId}',
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+              style: theme.textTheme.bodySmall,
             ),
           ],
         ),

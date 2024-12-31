@@ -41,7 +41,11 @@ class _MyAppState extends State<MyApp> {
           ],
           onGenerateTitle: (BuildContext context) =>
               AppLocalizations.of(context)!.appTitle,
-          theme: ThemeData(),
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.blue),
+            useMaterial3: true,
+          ),
           darkTheme: ThemeData.dark(),
           themeMode: widget.settingsController.themeMode,
           onGenerateRoute: (RouteSettings routeSettings) {
