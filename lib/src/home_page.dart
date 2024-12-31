@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'word/word.dart';
 import 'index_page.dart';
 import 'search_page.dart';
-import 'word/word_details_view.dart';
+import 'settings/settings_view.dart';
 
 class HomePage extends StatefulWidget {
   final void Function(List<Word> words) onWordsLoaded;
@@ -79,7 +79,6 @@ class _HomePageState extends State<HomePage> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              // Wrap the Column in SingleChildScrollView
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -187,6 +186,37 @@ class _HomePageState extends State<HomePage> {
                                 const Text(
                                   'Tap to get a new word',
                                   style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Settings Card
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, SettingsView.routeName);
+                      },
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              children: const [
+                                Icon(Icons.settings, size: 24),
+                                SizedBox(width: 16),
+                                Text(
+                                  'Settings',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ],
                             ),
