@@ -150,15 +150,15 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      child: SizedBox(
+                      child: const SizedBox(
                         width: double.infinity,
                         child: Card(
                           elevation: 4,
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(16.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   'Browse Words',
                                   style: TextStyle(
@@ -187,15 +187,15 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      child: SizedBox(
+                      child: const SizedBox(
                         width: double.infinity,
                         child: Card(
                           elevation: 4,
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(16.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   'Search Words',
                                   style: TextStyle(

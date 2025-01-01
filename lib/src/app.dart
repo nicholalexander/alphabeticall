@@ -16,10 +16,10 @@ class MyApp extends StatefulWidget {
   final SettingsController settingsController;
 
   @override
-  _MyAppState createState() => _MyAppState();
+  MyAppState createState() => MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   List<Word> allWords = []; // Global word list
 
   @override
