@@ -51,7 +51,7 @@ class WordDetailsView extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            '${meaning.speechPart}',
+                            meaning.speechPart,
                             style: theme.textTheme.bodyLarge?.copyWith(
                               fontStyle: FontStyle.italic,
                               color: theme.colorScheme.secondary,

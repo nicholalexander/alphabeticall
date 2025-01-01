@@ -13,10 +13,10 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.onWordsLoaded});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   List<Word> allWords = [];
   Word? randomWord;
   bool isLoading = true;
@@ -75,7 +75,64 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Alphabeticall')),
+      appBar: AppBar(
+        title: const Text('Alphabeticall'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color:
+                    Theme.of(context).primaryColor, // Use theme's primary color
+              ),
+              margin: EdgeInsets.zero, // Remove default margin
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.menu,
+                    color: Theme.of(context)
+                        .primaryIconTheme
+                        .color, // Use theme's icon color
+                    size: 30,
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    'Menu',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Theme.of(context)
+                              .primaryTextTheme
+                              .titleLarge
+                              ?.color,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.settings,
+                color:
+                    Theme.of(context).iconTheme.color, // Use theme's icon color
+              ),
+              title: Text(
+                'Settings',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge, // Updated for Material 3
+              ),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                Navigator.pushNamed(context, SettingsView.routeName);
+              },
+            ),
+          ],
+        ),
+      ),
+
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -93,15 +150,15 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      child: SizedBox(
+                      child: const SizedBox(
                         width: double.infinity,
                         child: Card(
                           elevation: 4,
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(16.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   'Browse Words',
                                   style: TextStyle(
@@ -130,15 +187,15 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      child: SizedBox(
+                      child: const SizedBox(
                         width: double.infinity,
                         child: Card(
                           elevation: 4,
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(16.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   'Search Words',
                                   style: TextStyle(
@@ -186,37 +243,6 @@ class _HomePageState extends State<HomePage> {
                                 const Text(
                                   'Tap to get a new word',
                                   style: TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Settings Card
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, SettingsView.routeName);
-                      },
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Card(
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Row(
-                              children: const [
-                                Icon(Icons.settings, size: 24),
-                                SizedBox(width: 16),
-                                Text(
-                                  'Settings',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
                                 ),
                               ],
                             ),

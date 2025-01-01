@@ -8,10 +8,10 @@ class SearchPage extends StatefulWidget {
   const SearchPage({super.key, required this.words});
 
   @override
-  _SearchPageState createState() => _SearchPageState();
+  SearchPageState createState() => SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class SearchPageState extends State<SearchPage> {
   String query = '';
   List<Word> filteredWords = [];
 
