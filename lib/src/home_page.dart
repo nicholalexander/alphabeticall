@@ -82,21 +82,48 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color:
+                    Theme.of(context).primaryColor, // Use theme's primary color
               ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+              margin: EdgeInsets.zero, // Remove default margin
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.menu,
+                    color: Theme.of(context)
+                        .primaryIconTheme
+                        .color, // Use theme's icon color
+                    size: 30,
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    'Menu',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Theme.of(context)
+                              .primaryTextTheme
+                              .titleLarge
+                              ?.color,
+                        ),
+                  ),
+                ],
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
+              leading: Icon(
+                Icons.settings,
+                color:
+                    Theme.of(context).iconTheme.color, // Use theme's icon color
+              ),
+              title: Text(
+                'Settings',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge, // Updated for Material 3
+              ),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
                 Navigator.pushNamed(context, SettingsView.routeName);
@@ -105,6 +132,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
