@@ -75,7 +75,36 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Alphabeticall')),
+      appBar: AppBar(
+        title: const Text('Alphabeticall'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                Navigator.pushNamed(context, SettingsView.routeName);
+              },
+            ),
+          ],
+        ),
+      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -186,37 +215,6 @@ class _HomePageState extends State<HomePage> {
                                 const Text(
                                   'Tap to get a new word',
                                   style: TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Settings Card
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, SettingsView.routeName);
-                      },
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Card(
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Row(
-                              children: const [
-                                Icon(Icons.settings, size: 24),
-                                SizedBox(width: 16),
-                                Text(
-                                  'Settings',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
                                 ),
                               ],
                             ),
