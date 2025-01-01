@@ -13,10 +13,10 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.onWordsLoaded});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   List<Word> allWords = [];
   Word? randomWord;
   bool isLoading = true;
